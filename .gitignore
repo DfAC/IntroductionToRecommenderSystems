@@ -4,3 +4,4 @@ cache/
 *.pdf
 tmp/
 images/
+.ipynb_checkpoints/
