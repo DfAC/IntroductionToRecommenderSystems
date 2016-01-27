@@ -30,7 +30,7 @@ def userProfileWithIDF(preferecesData,userVotes,IDF):
   cols = [pd.DataFrame(preferecesData[col].values * userVotes.values, columns=[col]) for col in preferecesData]
   votes = cols[0].join(cols[1:])
   votes = votes.sum()
-  votes = votes*IDF
+  votes = votes*IDFx
 
   return votes
 
@@ -49,15 +49,13 @@ def GetTopFive(user):
 #nice correlation plot 
 # source - internet
 def MakeNiceCorrPlot(pandaDF):
-	corr = pandaDF.corr()
+  corr = pandaDF.corr()
 
-	# Generate a mask for the upper triangle
-	mask = np.zeros_like(corr, dtype=np.bool)
-	mask[np.triu_indices_from(mask)] = True
-
-	# Set up the matplotlib figure
-	f, ax = plt.subplots(figsize=(11, 9))
-
-	# Draw the heatmap with the mask and correct aspect ratio
-	sns.heatmap(corr, mask=mask, cmap="gist_rainbow", vmax=.3,square=True,linewidths=.5, cbar_kws={"shrink": .5}, ax=ax); 
-	# xticklabels=5, yticklabels=5, 
+  # Generate a mask for the upper triangle
+  mask = np.zeros_like(corr, dtype=np.bool)
+  mask[np.triu_indices_from(mask)] = True
+  # Set up the matplotlib figure
+  f, ax = plt.subplots(figsize=(11, 9))
+  # Draw the heatmap with the mask and correct aspect ratio
+  sns.heatmap(corr, mask=mask, cmap="gist_rainbow", vmax=.3,square=True,linewidths=.5, cbar_kws={"shrink": .5}, ax=ax); 
+  # xticklabels=5, yticklabels=5, 
