@@ -67,18 +67,53 @@ def MakeNiceCorrPlot(pandaDF):
   # xticklabels=5, yticklabels=5, 
 
 
-  #Create prediction using user votes
+  #Create prediction using other user votes using corr between users
 # Correlation series (UserID,corrWithTargetUser) Votes(MovieID,Votes)
 def UserBasedPrediction(CorrSeries,Votes):
-  totalWeight = CorrSeries.values.sum()
+
   predictedVotes = pd.Series(0,index=Votes.index)
+  totalWeight = predictedVotes[:] #makes a copy of the list
   #CorrSeries.values and #CorrSeries.index.values
 
-  #first iterate through corr and relevant userIDs
+  #iterate through corr and relevant userIDs
   for userID,weight in CorrSeries.iteritems():
-    #estimate vote from this user, if nan then vote == 0 
+    #estimate vote from this user, if nan then vote == 0
     predictedVotes = predictedVotes + Votes.ix[:,userID].fillna(value=0)*weight
+    #if no vote, weight ==0, hence weight will be diff for each element in the list
+    totalWeight = totalWeight + Votes.ix[:,userID].notnull() * weight
 
+  #calculate the final votes
   predictedVotes = predictedVotes/totalWeight
+  predictedVotes.replace([np.inf, -np.inf], 0,inplace=True) #in case of div/0
 
   return predictedVotes
+
+
+#Create prediction using other user votes using corr between users normalised as difference from average votes
+# Correlation matrix (targetUserID,corrWithTargetUser) Votes(MovieID,Votes)
+def UserBasedPredictionNromalised(CorrSeries,Votes,targetUserID):
+  
+  #lets get mean vote for each movie first
+  meanUserVotes = Votes.mean(axis=0).fillna(value=0) #mean() autoskip text and NaNs
+  predictedVotes = pd.Series(0,index=Votes.index) 
+  totalWeight = predictedVotes[:]
+
+  #iterate through corr and relevant userIDs
+  for userID,weight in CorrSeries.iteritems():
+    #estimate diff between this vote and this users mean; 
+    userDiffFromMean = Votes.ix[:,userID] - meanUserVotes[userID] #nan's will remain nan's
+    #pdb.set_trace()
+    predictedVotes = predictedVotes + userDiffFromMean.fillna(value=0)*weight #nan  == 0
+    #if no vote, weight ==0, hence weight will be diff for each element in the list
+    totalWeight = totalWeight + Votes.ix[:,userID].notnull() * weight
+
+  #calculate the final votes
+  predictedVotes = predictedVotes/totalWeight +  meanUserVotes[targetUserID]
+  predictedVotes.replace([np.inf, -np.inf], 0,inplace=True) #in case of div/0
+
+  return predictedVotes
+
+
+############################
+# Week 5
+
