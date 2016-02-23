@@ -30,18 +30,71 @@ Recommendation systems week05 - Evaluation
 		* we upset users
 * [what about A/B testing?](http://recsys-qna.cs.umn.edu/#/course/1/discussion/1038)
 
+<<<<<<< HEAD
+# Basic accuracy metrix
+
+* we usually do leave one out or do multiple cross-validation
+* we dont check all of data, maybe 10%
+* all of accuracy errors are correlated with each other
+* error can be dominated by irrelevant parts of item space
+	* a lot of those errors are on bad items (items u are not going to go for anyway)
+	* so irrelevant
+* MAE
+	* L1
+	* movie lens a lot of work took to get MAE<0.7 star
+	* it will not translate across datasets, be careful
+		* compute MAE on common subset from both algorithms
+		* normalising does not solve problem here
+* MSE
+	* L2
+	* penalise large errors more
+* RMSE
+	* give us proper scale
+	* it is sqrt(MSE) as it is more meaningful
+	* we can get MSE for each user and then average those
+		* this way every user contribute by the same way
 
 
+# Basic Decision Support Metrics
 
-
-
-
-
-
-
+* decision support - we want users to make good decisions
+	* it is critical to sort recommendations in proper order
+	* error - ad hoc measurement of wrong prediction
+		* there is no standard approach
+		* reversal are big mistakes (3 on 5 point scale)
+			* it will reduce belive in the system
+* is about balance between error rate, reversal and
+* [precision, recall](https://en.wikipedia.org/wiki/Precision_and_recall)
+	* precision - % of items that are selected and relevant
+		* not wasting user time
+	* recall - % of relevant items that are selected
+		* not missing useful staff
+		* so you will get too much data to look at
+	* we need ground truth for those metrics
+		* have labelled data won't work as recommendation is a personal decision so its not always possible
+		* fake precision/recall
+			* take item out and compare with what user chosen
+			* this is biased by user choices
+			* good recommender might have selected something that user never chosen
+		* human rating experiments
+	* F1 metrics is mix between those two
+		* $F_1 = \frac{2PR}{P+R}$
+		* it is mostly useful for comparison not by itself
+	* another take is to take precision @n
+		* precision at top 20 movies ect
+		* $P_{@n} = \frac{N_{r@n}}{n}
+		* anther approach is to compute this as an average over the experiments with 1 hit and large number of misses
+	* Mean Average precision
+		* take average precision at top-n retrieval
+		* not standardised
+	*  [Receiver Operating Characteristic](https://en.wikipedia.org/wiki/Receiver_operating_characteristic)
+		* better than previous one
+		* left of threshold making filter more efficient
+		* look for area under the curve as estimation of accuracy
 
 # Rank Metrics
 
+* putting results in order
 * prediction accuracy -  how well does recommender estimate preferences?
 * decision support -  how well are we at finding good things?
 	* recall
@@ -74,14 +127,14 @@ Recommendation systems week05 - Evaluation
 # Hidden data evaluations
 
 * fallacy of this hidden data evaluation
-* algorythm will get punished if it returns items I haven't seen yet
+* algorithm will get punished if it returns items I haven't seen yet
 * Netflix challenge - it was supposed to improved RMSE
 	* this does not solve the problem
 	* you want to use whole scale for things that matters not for counting failure
 * you are aiming for most popular item here, which is not the best approach
 	* user might have bought it anyway
 * magic solution here is **testing with users**
-* those metricks are useful to weed out poor models and poor data
+* those metrics are useful to weed out poor models and poor data
 * does your methodology sustain your
 
 # more metrics
@@ -174,10 +227,10 @@ Recommendation systems week05 - Evaluation
 
 * how your data behaviour over time
 * experience improvement over time
-* results has to change otherwise ppl will not see recomender to work proerly
+* results has to change otherwise ppl will not see recommender to work properly
 * improve diversity
 	* swap between algorithms
-	* it is much more difficult for attacker to sucessfuly spoof the system
+	* it is much more difficult for attacker to successfully spoof the system
 
 # Nava Tintarev - explanations
 
@@ -200,7 +253,6 @@ You are responsible for a recommender system for an e-commerce site that has **t
 
 A few other details: this is a domain where people do occasionally re-purchase items, but not frequently. Most regular customers visit between once a week and once every three months. The site has complete details on all previous purchases, and has customer ratings for about 5% of the purchased items. Also, the site does a pretty good job recommending to new customers based on demographics and overall popularity, so you are focused on **finding recommenders that take advantage of information learned from customers who have already purchased several items**. Which of the following evaluation plans/metrics seems best?
 
-
 * Top-n precision evaluation. In this plan we’ll use all customers who have at least 10 product purchases, and measure the top-3 precision of recommendations using a 5-fold cross-validation against a random 80% training/20% test set. We measure as a “hit” anything withheld from the test set. We will identify the best few algorithm candidates based on highest top-3 precision.
 
 <del>
@@ -210,6 +262,7 @@ A few other details: this is a domain where people do occasionally re-purchase i
 * Spearman rank correlation evaluation. In this plan, we’ll use all customers who have at least 10 product purchases, compute a recommendation list (using and 80/20 random training/test data set and five-fold cross validation), and measure the Spearman correlation between the between the withheld items and the recommedation list. We will identify the best few algorithms based on the highest Spearman correlation.
 
 * Diversity and Serendipity evaluation. In this plan, we’ll use all customers who have at least 10 product purchases, compute a recommendation list for each customer (using their entire rating/purchase set), and measure the diversity and popularity of the top-3 recommendations. We’ll take a balanced measure of diversity and inverse popularity (50% each), and identify the
+</del>
 
 </del>
 
